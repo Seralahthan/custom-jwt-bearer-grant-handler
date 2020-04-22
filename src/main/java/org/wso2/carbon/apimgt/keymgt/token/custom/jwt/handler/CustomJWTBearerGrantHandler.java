@@ -1,11 +1,10 @@
 package org.wso2.carbon.apimgt.keymgt.token.custom.jwt.handler;
 
-import com.google.gson.JsonArray;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
+import net.minidev.json.JSONArray;
 import org.wso2.carbon.identity.oauth2.IdentityOAuth2Exception;
 import org.wso2.carbon.identity.oauth2.grant.jwt.JWTBearerGrantHandler;
 import org.wso2.carbon.identity.oauth2.grant.jwt.JWTConstants;
@@ -14,7 +13,6 @@ import org.wso2.carbon.identity.oauth2.token.OAuthTokenReqMessageContext;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
     private static final Log log = LogFactory.getLog(CustomJWTBearerGrantHandler.class);
@@ -29,11 +27,12 @@ public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
             log.error("Couldn't retrieve signed JWT", e);
         }
 
-        JSONArray userScopes = (JSONArray)(signedJWT != null ? signedJWT.getPayload().toJSONObject().get("scopes") : null);
+        JSONArray userScopes = (JSONArray)(signedJWT != null ?
+                signedJWT.getPayload().toJSONObject().get("scope") : null);
+
         if (userScopes != null) {
             String[] requestedScopes = tokReqMsgCtx.getOauth2AccessTokenReqDTO().getScope();
             if (requestedScopes != null) {
-                //            tokReqMsgCtx.setScope(scope.toString().split(" "));
                 tokReqMsgCtx.setScope(filterScopes(userScopes, requestedScopes));
             }
         }
@@ -51,6 +50,7 @@ public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
 
         return filteredScopes.toArray(new String[filteredScopes.size()]);
     }
+
     private SignedJWT getSignedJWT(OAuthTokenReqMessageContext tokReqMsgCtx) throws IdentityOAuth2Exception {
         RequestParameter[] params = tokReqMsgCtx.getOauth2AccessTokenReqDTO().getRequestParameters();
         String assertion = null;
