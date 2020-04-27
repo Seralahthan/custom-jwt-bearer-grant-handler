@@ -8,7 +8,6 @@
     <artifactId>org.wso2.carbon.apimgt.keymgt.token.custom.jwt.handler</artifactId>
     <version>1.0.0</version>
 
-
     <dependencies>
         <dependency>
             <groupId>org.wso2.carbon.identity.inbound.auth.oauth2</groupId>
@@ -25,11 +24,81 @@
             <artifactId>org.wso2.carbon.apimgt.keymgt</artifactId>
             <version>6.3.95</version>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.apimgt</groupId>
-            <artifactId>org.wso2.carbon.apimgt.keymgt</artifactId>
-            <version>6.3.95</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.wso2.carbon</groupId>-->
+<!--            <artifactId>org.wso2.carbon.logging</artifactId>-->
+<!--            <version>${commons-logging.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <source>1.8</source>-->
+<!--                    <target>1.8</target>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.felix</groupId>-->
+<!--                <artifactId>maven-bundle-plugin</artifactId>-->
+<!--                <extensions>true</extensions>-->
+<!--                <configuration>-->
+<!--                    <instructions>-->
+<!--                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>-->
+<!--                        <Bundle-Name>${project.artifactId}</Bundle-Name>-->
+<!--                        <Import-Package>-->
+<!--                            org.wso2.carbon.identity.oauth2.grant.jwt;-->
+<!--                            version="${identity.oauth2.grant.jwt.version.range}",-->
+<!--                            org.apache.commons.logging; version="${commons-logging.osgi.version.range}"-->
+<!--                        </Import-Package>-->
+<!--                        <Export-Package>-->
+<!--                            org.wso2.carbon.apimgt.keymgt.token.custom.jwt.handler.*;-->
+<!--                        </Export-Package>-->
+<!--                    </instructions>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>wso2-nexus</id>-->
+<!--            <name>WSO2 internal Repository</name>-->
+<!--            <url>http://maven.wso2.org/nexus/content/groups/wso2-public/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--                <updatePolicy>daily</updatePolicy>-->
+<!--                <checksumPolicy>ignore</checksumPolicy>-->
+<!--            </releases>-->
+<!--        </repository>-->
+<!--        <repository>-->
+<!--            <id>wso2.releases</id>-->
+<!--            <name>WSO2 internal Repository</name>-->
+<!--            <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--                <updatePolicy>daily</updatePolicy>-->
+<!--                <checksumPolicy>ignore</checksumPolicy>-->
+<!--            </releases>-->
+<!--        </repository>-->
+<!--        <repository>-->
+<!--            <id>wso2.snapshots</id>-->
+<!--            <name>Apache Snapshot Repository</name>-->
+<!--            <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--                <updatePolicy>daily</updatePolicy>-->
+<!--            </snapshots>-->
+<!--            <releases>-->
+<!--                <enabled>false</enabled>-->
+<!--            </releases>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!--    <properties>-->
+<!--        <commons-logging.version>4.4.3</commons-logging.version>-->
+<!--        <commons-logging.osgi.version.range>[1.2,2.0)</commons-logging.osgi.version.range>-->
+<!--        <identity.oauth2.grant.jwt.version.range>[1.0.15,2.0)</identity.oauth2.grant.jwt.version.range>-->
+<!--    </properties>-->
 </project>

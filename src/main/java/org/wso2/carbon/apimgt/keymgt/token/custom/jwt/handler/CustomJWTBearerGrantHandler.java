@@ -1,6 +1,7 @@
 package org.wso2.carbon.apimgt.keymgt.token.custom.jwt.handler;
 
 import com.nimbusds.jwt.SignedJWT;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,11 +16,16 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
-    private static final Log log = LogFactory.getLog(CustomJWTBearerGrantHandler.class);
+    private static Log log = LogFactory.getLog(CustomJWTBearerGrantHandler.class);
 
     @Override
     public boolean validateScope(OAuthTokenReqMessageContext tokReqMsgCtx) throws IdentityOAuth2Exception {
         SignedJWT signedJWT = null;
+        JSONArray userScopes = null;
+
+        if(log.isDebugEnabled()) {
+            log.debug("Entering the CustomJWTBearerGrantHandler");
+        }
 
         try {
             signedJWT = getSignedJWT(tokReqMsgCtx);
@@ -27,8 +33,23 @@ public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
             log.error("Couldn't retrieve signed JWT", e);
         }
 
-        JSONArray userScopes = (JSONArray)(signedJWT != null ?
-                signedJWT.getPayload().toJSONObject().get("scope") : null);
+        if (log.isDebugEnabled()) {
+            log.debug("Extracting the Json payload from the signed JWT");
+        }
+
+        //Extracting the JSON payload
+        JSONObject jsonPayload = signedJWT != null ? signedJWT.getPayload().toJSONObject() : null;
+
+        //Look in the JWT token for "scope" and "scopes" as claims
+        if (jsonPayload != null) {
+            if (jsonPayload.containsKey("scope") && jsonPayload.containsKey("scopes")) {
+                userScopes = formatScopes(jsonPayload, "scopes");
+            } else if (jsonPayload.containsKey("scope")) {
+                userScopes = formatScopes(jsonPayload, "scope");
+            } else if (jsonPayload.containsKey("scopes")){
+                userScopes = formatScopes(jsonPayload, "scopes");
+            }
+        }
 
         if (userScopes != null) {
             String[] requestedScopes = tokReqMsgCtx.getOauth2AccessTokenReqDTO().getScope();
@@ -38,6 +59,23 @@ public class CustomJWTBearerGrantHandler extends JWTBearerGrantHandler {
         }
 
         return super.validateScope(tokReqMsgCtx);
+    }
+
+    //Formats the "scope" Or "scopes" claim to only allow a String Or a JSONArray
+    private JSONArray formatScopes(JSONObject jsonPayload, String key) {
+        JSONArray userScopesArr = null;
+
+        if (jsonPayload.get(key) instanceof String) {
+            userScopesArr = new JSONArray();
+            userScopesArr.add(jsonPayload.get(key));
+            return userScopesArr;
+        }
+
+        if (jsonPayload.get(key) instanceof JSONArray) {
+            userScopesArr = (JSONArray) jsonPayload.get(key);
+        }
+
+        return userScopesArr;
     }
 
     private String[] filterScopes(JSONArray userScopes, String[] requestedScopes) {
